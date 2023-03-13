@@ -1,0 +1,19 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+    {% for message in app.flashes('MotDePasseModifier') %}
+        <div class="flash-notice alert alert-success">
+            {{ message }}
+        </div>
+	{% endfor %}
+    
+	<div class="container text-center mt-3">
+		<div class="card">
+			<div class="card-body">
+				<h5 class="card-title">{{utilisateur.email}}</h5>
+				<a href="{{path('modifier_mot_de_passe_utilisateur')}}" class="btn btn-outline-secondary">Modifier le mot de passe</a>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

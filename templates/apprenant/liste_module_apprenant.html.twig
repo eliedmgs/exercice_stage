@@ -1,0 +1,36 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+	<h1 class="text-center">Liste de mes cours</h1>
+	
+
+	<div class="container">
+	</hr>
+		<table class="table" id="monTableau">
+			<thead>
+				<tr>
+					<th scope="col">Image</th>
+					<th scope="col">Nom</th>
+					<th scope="col">Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for module in utilisateur.apprenant.modules %}
+					<tr>
+						<td>
+							{% if module.image != null %}
+
+								<a href="{{path('module_apprenant', {'id' : module.id}) }}"><img src="{{asset('assets/img/modules/imgModule' ~ module.id ~'.'~ module.extension)}}" alt="Module" height="100em" width="120em"></a>
+							{% else %}
+								<a href="{{path('module_apprenant', {'id' : module.id}) }}"><img src="{{asset('assets/img/formation.jpg')}}" height="100em" width="120em"></a>
+							{% endif %}
+						</td>
+						<td class="align-middle"><a href="{{ path('module_apprenant', {'id': module.id}) }}">{{module.nom}}</a></td>
+						<td class="align-middle">{{module.miniDescription}}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+
+		</table>
+	</div>
+{% endblock %}

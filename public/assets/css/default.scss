@@ -1,0 +1,53 @@
+*{
+    font-family: 'Varela Round', sans-serif;
+}
+/*-------------------------------------barre Navigation--------------------*/ 
+
+.logo{
+    width: 100px;
+    height: auto;
+}
+.navbar navbar {
+    color: #2474d6;
+
+}
+ 
+ 
+/*-------------------------------------page d'Accueil---------------------*/
+
+
+
+.photoaccueil{
+   /*width: 100%;
+    height: 30em;*/
+    max-width : 100%;
+    height: auto;
+    display: block;
+}
+.divBtn {
+    position :relative;
+    bottom: 10em;
+    left: 10em;
+}
+
+.card-title {
+    text-align: center;
+    color: #2474d6;
+    padding: auto;
+
+}
+
+$theme-colors: (
+    "primary": #2474d6,
+    "secondary":#ff6666,
+    "arrierePlan": #fffcfc
+);
+
+$btn-border-radius: 45px;
+
+
+
+
+
+
+@import "node_modules/bootstrap/scss/bootstrap"; 

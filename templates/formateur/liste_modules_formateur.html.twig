@@ -1,0 +1,86 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+{% for message in app.flashes('notice') %}
+<div class="flash-notice alert alert-success">
+	{{ message }}
+</div>
+{% endfor %}
+
+
+<br>
+<h1 class="text-center">Liste de mes modules <a href="{{path('ajout_module')}}" class="btn btn-outline-danger"><span
+			class="fas fa-plus"></span>&nbsp;Ajouter un module</a></h1>
+
+
+<div class="container"><br><br>
+	<table class="table" id="monTableau">
+		<thead>
+			<tr>
+				<th scope="col">Image</th>
+				<th scope="col">Nom</th>
+				<th scope="col">Formation</th>
+				<th scope="col">Mini description</th>
+				<th scope="col">Q&A</th>
+				<th scope="col">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			{% for module in modules|sort ((a,b) => a.nom <=> b.nom) %}
+			<tr>
+				<td>
+					{% if module.image != null %}
+					<a href="{{asset('assets/img/modules/imgModule'~ module.id ~'.'~ module.extension)}}" target="_blank">
+						<img src="{{asset('assets/img/modules/imgModule'~ module.id ~'.'~ module.extension)}}" alt="Module"
+							height="100em" width="120em">
+					</a>
+					{% else %}
+					<img src="{{asset('assets/img/formation.jpg')}}" height="100em" width="120em">
+					{% endif %}
+				</td>
+				<td class="align-middle">
+					<a href="{{path('module', { 'id' : module.id }) }}">{{module.nom}}</a>
+				</td>
+				<td class="align-middle">
+					{% for formation in module.formations|sort ((a,b) => a.nom <=> b.nom) %}
+						<span class="badge badge-pill badge-success">{{formation.nom}}</span>
+					{% endfor %}
+				</td>
+				<td class="align-middle">{{module.MiniDescription}}</td>
+				<td class="align-middle"><a type="button" href="{{path('liste_module_questions_reponses', { 'id' : module.id }) }}">Afficher</a></td>
+
+				<td class="align-middle"> <a href="{{path('modifier_module', { 'id' : module.id }) }}"><button
+							class="btn btn-outline-dark"> <span class="fas fa-edit"></span></button></a>
+					<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerModule{{module.id}}"> 
+						<span class="fas fa-trash-alt"></span>
+					</button>
+				</td>
+				<div class="modal fade" id="supprimerModule{{module.id}}" tabindex="-1" role="dialog"
+					aria-labelledby="supprimerModuleLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title text-center" id="supprimerModuleLabel">Etes-vous sûrs de vouloir
+									supprimer le module ?</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+								<a href="{{path('supprimer_module', {'id' : module.id } )}}">
+									<button type="button" class="btn btn-outline-primary">Oui</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{% endblock %}

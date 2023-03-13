@@ -1,0 +1,31 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block title %} {{ parent() }} - Ajout Q.C.M
+{% endblock %}
+
+
+{% block contenu %}
+<br>
+<h1 class="text-center">AJOUT D'UN QCM</h1>
+
+
+
+<div class="container col-4 mt-3">
+	{{ form_start(form) }}
+	<div class="form-group">
+		<div>
+			{{ form_label(form.nom, "Nom:", {'attr': {'class': 'form-control'}})}}
+			{% if form_errors(form.nom) == null %}
+			{{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+			{% else %}
+			{{ form_widget(form.nom, {'attr': {'class': 'form-control is-invalid'}}) }}
+			<div class="invalid-feedback">{{form_errors(form.nom)}}</div>
+			{% endif %}
+		</div>
+	</div>
+	{{ form_end(form) }}
+</div>
+
+
+
+{% endblock %}

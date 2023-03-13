@@ -1,0 +1,34 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block title %}Modifier une vidéo 
+{% endblock %}
+
+
+{% block contenu %}
+
+
+	<h3 class="text-center mt-3">Modifier votre vidéo</h3>
+	{{form_errors(form)}}
+	<div class="container col-4 mt-3">
+		{{ form_start(form) }}
+		<div class="form-group">
+			{{ form_label(form.nom, 'Nom :') }}
+			{% if form_errors(form.nom) == null %}
+				{{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+			{% else %}
+				{{ form_widget(form.nom, {'attr': {'class': 'form-control is-invalid'}}) }}
+				<div class="invalid-feedback">
+					{{ form_errors(form.nom) }}
+				</div>
+			{% endif %}
+		</div>
+
+		<div class="form-group">
+			{{ form_row(form.file) }}
+		</div>
+
+		{{form_end(form)}}
+	</div>
+
+
+{% endblock %}

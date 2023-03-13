@@ -1,0 +1,60 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+	<!-- hero area-->
+	<div>
+		<img class="photoaccueil" src="{{ asset('assets/img/accueil.jpg') }}"/>
+	</div>
+	<div class='divBtn'>
+		<a href="{{path('liste_des_modules')}}" button type="button" class="boutonaccueil btn col-3 btn-outline-secondary col-3">ACCES COURS</button></a>
+	</div>
+	
+
+
+	<!-- cartes domaines de formation-->
+
+	<div class="row row-cols-1 row-cols-md-4">
+		<div class="col mb-3">
+			<div class="card">
+				<img src="{{ asset('assets/img/informatique3.jpg') }}" class="card-img-top" alt="metier de l informatique">
+				<div class="card-body">
+
+					<button type="button" class="btn btn-outline-primary btn-block">Informatique</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col mb-3">
+			<div class="card">
+				<img src="{{ asset('assets/img/rh2.jpg') }}" class="card-img-top" alt="assistanat">
+				<div class="card-body">
+					<button type="button" class="btn btn-outline-primary btn-block">Assistanat</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col mb-3">
+			<div class="card">
+				<img src="{{ asset('assets/img/gestion.jpg') }}" class="card-img-top" alt="gestion">
+				<div class="card-body">
+					<button type="button" class="btn btn-outline-primary btn-block">Gestion</button>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="col mb-3">
+			<div class="card">
+				<img src="{{ asset('assets/img/fpa2.jpg') }}" class="card-img-top" alt="formateur pour adultes">
+				<div class="card-body">
+					<button type="button" class="btn btn-outline-primary btn-block">FPA</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

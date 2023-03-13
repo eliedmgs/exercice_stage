@@ -1,0 +1,46 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+<div class="mt-3 bg-primary text-white text-center" >
+    <h1>{{ module.nom }}</h1>
+</div>
+<div class="container text-center">
+
+    <img id="image" class="card-img-top mb-5 mt-5" src="{{asset('assets/img/modules/imgModule'~ module.id ~'.'~ module.extension)}}"
+        alt="Module" width="400em" height="400em">
+    <p class="mt-3">{{ module.description }}</p>
+
+    {% set nbCours = module.videos|length + module.pdfs|length + module.qcms|length %}
+					{% for ordre in 1 .. nbCours %}
+						{% for video in module.videos %}
+							{% if ordre == video.ordre %}
+								<p class="card card-body">
+									{{video.ordre}}
+									.
+									{{video.nom}}
+								</p>
+							{% endif %}
+						{% endfor %}
+						{% for pdf in module.pdfs %}
+							{% if ordre == pdf.ordre %}
+								<p class="card card-body">
+									{{pdf.ordre}}
+									.
+									{{pdf.nom}}
+								</p>
+							{% endif %}
+						{% endfor %}
+
+						{% for qcm in module.qcms %}
+							{% if ordre == qcm.ordre %}
+								<p class="card card-body">
+									{{qcm.ordre}}
+									.
+									{{qcm.nom}}
+								</p>
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+</div>
+{% endblock %}

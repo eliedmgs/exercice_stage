@@ -1,0 +1,22 @@
+{% extends 'modeles/adminModele.html.twig' %}
+{% block contenu %}
+    <h1 class="text-center mt-3">Ajouter des modules</h1>
+
+    <div class="container col-4 mt-3">
+        {{ form_start(form) }}
+        <div class="form-group">
+
+            {{ form_label(form.modules, 'Modules :') }}
+        </br>
+        {% for module in form.modules %}
+            <div class="form-check form-check-inline">
+                {{ form_widget(module, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(module) }}
+            </div>
+        {% endfor %}
+        </div>
+        {{ form_end(form) }}
+    </div>
+        
+
+{% endblock %}

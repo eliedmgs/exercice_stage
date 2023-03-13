@@ -1,0 +1,79 @@
+{% extends 'modeles/adminModele.html.twig' %}
+
+{% block contenu %}
+	<div class="card">
+		<h1 class="card-header text-center">Liste des domaines de formations</h1>
+		<div class="card-body text-right">
+			<a href="{{ path('admin_ajouter_domaine_formation') }}" type="button" class="btn btn-outline-secondary">
+				<i class="fas fa-plus"></i>&nbsp;Ajouter un domaine de formation</a>
+		</div>
+		{% for message in app.flashes('notice') %}
+			<div class="flash-notice alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+		<div class="card-body">
+			<table class="table" id="monTableau">
+				<thead>
+					<tr>
+						<th scope="col">Image</th>
+						<th scope="col">Nom</th>
+                        <th scope="col">Formation</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for domaineFormation in domainesFormations|sort((a, b) => a.nom <=> b.nom) %}
+						<tr>
+                            <td class="align-middle">
+                                {% if domaineFormation.image != null %}
+                                <a href="{{asset('assets/img/domaine_formation/imgDomaineFormation'~ domaineFormation.id ~'.'~ domaineFormation.extension)}}" target="_blank">
+                                    <img src="{{asset('assets/img/domaine_formation/imgDomaineFormation'~ domaineFormation.id ~'.'~ domaineFormation.extension)}}" alt="Domaine de formation"
+                                        height="100em" width="120em">
+                                </a>
+                                {% else %}
+                                <img src="{{asset('assets/img/domaine_formation/imgDomaineFormationDefault.jpg')}}" height="100em" width="120em">
+                                {% endif %}
+				            </td>
+                            <td class="align-middle">{{ domaineFormation.nom }}</td>
+                            <td class="align-middle">
+                                {% for formation in domaineFormation.formations %}
+                                    <span class="badge badge-pill badge-info">{{ formation.nom }}<span>
+                                {% endfor %}
+                            </td>
+
+                            <td class="align-middle">
+                                <a href="{{path('admin_modifier_domaine_formation', {'id' : domaineFormation.id } )}}" class="btn btn-outline-dark">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerDomaineFormation{{domaineFormation.id}}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+							</td>
+						</tr>
+						<div class="modal fade" id="supprimerDomaineFormation{{domaineFormation.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerDomaineFormationLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title text-center" id="supprimerDomaineFormationLabel">Etes-vous sûrs de vouloir supprimer la formation ?</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+										<a href="{{path('admin_supprimer_domaine_formation', {'id' : domaineFormation.id } )}}">
+											<button type="button" class="btn btn-outline-primary">Oui</button>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+                        </tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{%  endblock %}

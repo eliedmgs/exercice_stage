@@ -1,0 +1,131 @@
+{% extends 'modeles/adminModele.html.twig' %}
+
+{% block contenu %}
+	<div class="card">
+		<h1 class="card-header text-center">Liste des utilisateurs</h1>
+		<div class="card-body text-right">
+			<a href="{{ path('ajouter_utilisateur') }}" type="button" class="btn btn-outline-secondary">
+				<i class="fas fa-plus"></i>&nbsp;Ajouter un utilisateur</a>
+		</div>
+		{% for message in app.flashes('notice') %}
+			<div class="flash-notice alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		<div class="card-body">
+			<table class="table" id="monTableau">
+				<thead>
+					<tr>
+						<th scope="col">Email</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Role</th>
+						<th scope="col">Choix role</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for utilisateur in utilisateurs|sort((a, b) => a.email <=> b.email) %}
+						<tr>
+							<td>
+								<a href="{{ path('profil_utilisateur_admin', { 'id' : utilisateur.id }) }}">{{ utilisateur.email }}</a>
+							</td>
+							<td>{{ utilisateur.nom }}</td>
+							<td>{{ utilisateur.prenom }}</td>
+							<td>
+								{% for role in utilisateur.roles %}
+									<span class="badge badge-pill badge-primary">{{ role }}</span>
+								{% endfor %}
+							</td>
+							<td>
+								{% if is_granted("ROLE_SUPER_ADMIN") and "ROLE_SUPER_ADMIN" not in utilisateur.roles %}
+									{% if 'ROLE_ADMIN' in utilisateur.roles  %}
+										{% if utilisateur.roles|length > 1 %}
+											<a href="{{path('role_admin', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-success">
+												<i class="fas fa-minus"></i>&nbsp; Admin</a>&nbsp;
+										{% endif %}
+									{% else %}
+										<a href="{{path('role_admin', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-success">
+											<i class="fas fa-plus"></i>&nbsp; Admin</a>&nbsp;
+									{% endif %}
+									{% if 'ROLE_FORMATEUR' in utilisateur.roles %}
+										{% if utilisateur.roles|length > 1 %}
+											<a href="{{path('role_formateur', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-warning">
+												<i class="fas fa-minus"></i>&nbsp; Formateur</a>&nbsp;
+										{% endif %}
+									{% else %}
+										<a href="{{path('role_formateur', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-warning">
+											<i class="fas fa-plus"></i>&nbsp; Formateur</a>&nbsp;
+									{% endif %}
+									{% if 'ROLE_USER' in utilisateur.roles %}
+										{% if utilisateur.roles|length > 1 %}
+											<a href="{{path('role_user', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-danger">
+												<i class="fas fa-minus"></i>&nbsp;User</a>&nbsp;
+										{% endif %}
+									{% else %}
+										<a href="{{path('role_user', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-danger">
+											<i class="fas fa-plus"></i>&nbsp;User</a>&nbsp;
+									{% endif %}
+								{% endif %}
+								{% if is_granted("ROLE_ADMIN") and "ROLE_SUPER_ADMIN" not in utilisateur.roles and "ROLE_ADMIN" not in utilisateur.roles %}
+									{% if 'ROLE_FORMATEUR' in utilisateur.roles %}
+										<a href="{{path('role_formateur', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-warning">
+											<i class="fas fa-minus"></i>&nbsp; Formateur</a>&nbsp;
+									{% else %}
+										<a href="{{path('role_formateur', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-warning">
+											<i class="fas fa-plus"></i>&nbsp; Formateur</a>&nbsp;
+									{% endif %}
+									{% if 'ROLE_USER' in utilisateur.roles %}
+										<a href="{{path('role_user', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-danger">
+											<i class="fas fa-minus"></i>&nbsp;User</a>&nbsp;
+									{% else %}
+										<a href="{{path('role_user', {'id' : utilisateur.id } )}}" class="btn badge badge-pill badge-danger">
+											<i class="fas fa-plus"></i>&nbsp;User</a>&nbsp;
+									{% endif %}
+								{% endif %}
+							</td>
+							<td>
+								{% if is_granted("ROLE_SUPER_ADMIN") and "ROLE_SUPER_ADMIN" not in utilisateur.roles %}
+									<a href="{{path('modifier_utilisateur', {'id' : utilisateur.id } )}}" class="btn btn-outline-dark">
+										<i class="fas fa-user-edit"></i>
+									</a>
+									<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerUtilisateur{{utilisateur.id}}">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								{% endif %}
+								{% if is_granted("ROLE_ADMIN") and "ROLE_SUPER_ADMIN" not in utilisateur.roles and "ROLE_ADMIN" not in utilisateur.roles %}
+									<a href="{{path('modifier_utilisateur', {'id' : utilisateur.id } )}}" class="btn btn-outline-dark">
+										<i class="fas fa-user-edit"></i>
+									</a>
+									<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerUtilisateur{{utilisateur.id}}">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								{% endif %}
+							</td>
+						</tr>
+						<div class="modal fade" id="supprimerUtilisateur{{utilisateur.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerUtilisateurLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title text-center" id="supprimerUtilisateurLabel">Etes-vous sûrs de vouloir supprimer l'utilisateur ?</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+										<a href="{{path('supprimer_utilisateur', {'id' : utilisateur.id } )}}">
+											<button type="button" class="btn btn-outline-primary">Oui</button>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{%  endblock %}

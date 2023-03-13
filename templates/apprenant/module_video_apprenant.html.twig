@@ -1,0 +1,108 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+
+	<div class="row mt-3">
+		<div class="col-8 container">
+			{% for message in app.flashes('notice') %}
+				<div class="flash-notice alert alert-success">
+					{{ message }}
+				</div>
+			{% endfor %}
+			<div class="text-center">
+
+				<h1 class="my-3">{{ module.nom }}</h1>
+			</div>
+			<video controls width="100%" height="500em">
+				<source src="{{ asset('assets/videos/modules/file'~ video.id ~'.'~ video.extension) }}">
+			</video>
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a type="button" id="a1" class="nav-link active">Q&A</a>
+				</li>
+				<li class="nav-item">
+					<a type="button" id="a2" class="nav-link">Ajouter une question</a>
+				</li>
+			</ul>
+			<div id="b1">
+				{% for question in video.moduleQuestions %}
+					<div class="mt-2">
+						{{ apprenant.utilisateur.nom }}
+						:
+						{{ question }}
+					</div>
+					{% if question.moduleReponses|length > 0 %}
+						<a class="text-primary" data-toggle="collapse" href="#question{{question.id}}" role="button" aria-expanded="false" aria-controls="question{{question.id}}">
+							Afficher/Masquer les réponses
+						</a>
+					{% endif %}
+					<div class="card collapse" id="question{{question.id}}">
+						<div class="card-body">
+							{% for reponse1 in question.moduleReponses %}
+								<p class="card-text">{{ reponse1.formateur.utilisateur.nom }}
+									:
+									{{ reponse1.reponse }}</p>
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div id="b2" class="form-group mt-3 collapse">
+				{{ form_start(form) }}
+
+				<div>
+					{{ form_label(form.question, "Question:")}}
+					{% if form_errors(form.question) == null %}
+						{{ form_widget(form.question, {'attr': {'class': 'form-control', 'rows' : '3'}}) }}
+					{% else %}
+						{{ form_widget(form.question, {'attr': {'class': 'form-control is-invalid', 'rows' : '3'}}) }}
+						<div class="invalid-feedback">{{form_errors(form.question)}}</div>
+					{% endif %}
+				</div>
+
+				{{ form_end(form) }}
+			</div>
+		</div>
+		<div class="col-3">
+
+			<div class="card">
+				<div class="card-body">
+					{% set nbCours = module.videos|length + module.pdfs|length + module.qcms|length %}
+					{% for ordre in 1 .. nbCours %}
+						{% for video1 in module.videos %}
+							{% if ordre == video1.ordre %}
+								<a href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : video1.id}) }}" class="card card-body {% if app.request.attributes.get('_route') == 'cours_video_apprenant' and video1.id == video.id %}text-secondary{% endif %}">
+									{{video1.ordre}}
+									.
+									{{video1.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+						{% for pdf in module.pdfs %}
+							{% if ordre == pdf.ordre %}
+								<a href="{{path('cours_pdf_apprenant', {'id' : module.id, 'idFile' : pdf.id}) }}" class="card card-body">
+									{{pdf.ordre}}
+									.
+									{{pdf.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+
+						{% for qcm in module.qcms %}
+							{% if ordre == qcm.ordre %}
+								<a href="{{path('cours_qcm_apprenant', {'id' : module.id, 'idFile' : qcm.id}) }}" class="card card-body">
+									{{qcm.ordre}}
+									.
+									{{qcm.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

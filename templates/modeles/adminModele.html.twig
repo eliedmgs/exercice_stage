@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<nav class="navbar navbar-expand-lg navbar-light bg-warning">
+		<a class="navbar-brand"><img class="logo" src="{{asset('assets/img/logoprepavenir.png')}}"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="{{path('accueil_principal')}}">Accès site</a>
+				</li>
+				<li class="nav-item {% if app.request.attributes.get('_route') == 'indexAdmin' or app.request.attributes.get('_route') == 'admin_liste_formations' %}active{% endif %} dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						DASHBOARD
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="{{path('indexAdmin')}}">UTILISATEURS</a>
+						<a class="dropdown-item" href="{{path('admin_liste_formations')}}">FORMATIONS</a>
+						<a class="dropdown-item" href="{{path('admin_liste_domaines_formations')}}">DOMAINE DE FORMATIONS</a>
+					</div>
+				</li>
+			</ul>
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('profil_utilisateur')}}"><i class="fas fa-user"></i>&nbsp;Profil</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('app_logout')}}"><i class="fas fa-sign-out-alt"></i></a>
+					</li>
+				</ul>
+			{% endif %}
+		</div>
+
+	</nav>
+
+	{% block contenu %}{% endblock %}
+
+
+	<!-- Footer -->
+	<footer class="mt-3">
+		<nav class="navbar navbar-expand-lg navbar-light bg-arrierePlan">
+			<ul class="navbar-nav mx-auto">
+				<li class="nav-item">
+					<span class="nav-link">© 2020 Copyright :
+					<a href="https://https://www.prepavenir-formation.fr/">prepavenir-formation.fr</a></span>
+				</li>
+			</ul>
+		</nav>
+	</footer>
+		<!-- Copyright -->
+	<!-- Footer -->
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+<br>
+<h1 class="text-center">AJOUTER UNE REPONSE</h1>
+
+
+
+<div class="container mt-3">
+	<h5 class="font-weight-bold">Question : {{ moduleQuestion.question }}</h5>
+	{{ form_start(form) }}
+	<div class="form-group mt-3">
+		<div>
+			{{ form_label(form.reponse, "Reponse:")}}
+			{% if form_errors(form.reponse) == null %}
+			{{ form_widget(form.reponse) }}
+			{% else %}
+			{{ form_widget(form.reponse, {'attr': {'class': 'form-control is-invalid'}}) }}
+			<div class="invalid-feedback">{{form_errors(form.reponse)}}</div>
+			{% endif %}
+		</div>
+	</div>
+	{{ form_end(form) }}
+</div>
+
+
+
+
+
+{% endblock %}

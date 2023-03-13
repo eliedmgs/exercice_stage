@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<nav class="navbar navbar-expand-lg navbar-light bg-arrierePlan">
+		<a class="navbar-brand"><img class="logo" src="{{asset('assets/img/logoprepavenir.png')}}"></a>
+
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				{% if is_granted("ROLE_SUPER_ADMIN") or is_granted("ROLE_ADMIN") %}
+					<li class="nav-item {% if app.request.attributes.get('_route') == 'indexAdmin' %}active{% endif %}">
+						<a class="nav-link" href="{{path('indexAdmin')}}">Accès Admin</a>
+					</li>
+				{% endif %}
+				
+				<li class="nav-item {% if app.request.attributes.get('_route') == 'accueil_principal' %}active{% endif %}">
+					<a class="nav-link" href="{{path('accueil_principal')}}">Accueil</a>
+				</li>
+
+
+				<li class="nav-item {% if app.request.attributes.get('_route') == 'liste_des_modules' %}active{% endif %}">
+					<a class="nav-link" href="{{path('liste_des_modules')}}">Cours</a>
+				</li>
+
+				{% if is_granted('ROLE_FORMATEUR') %}
+				<li class="nav-item {% if app.request.attributes.get('_route') == 'liste_modules_formateur' %}active{% endif %}">
+					<a class="nav-link" href="{{path('liste_modules_formateur')}}">Mes modules</a>
+				</li>
+				{% endif %}
+
+				{% if is_granted('ROLE_USER') %}
+					<li class="nav-item {% if app.request.attributes.get('_route') == 'liste_module_apprenant' %}active{% endif %}">
+						<a class="nav-link" href="{{path('liste_module_apprenant')}}">Mes cours disponibles</a>
+					</li>
+				{% endif %}
+			</ul>
+			{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+				<ul class="navbar-nav ml-auto">
+
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('app_login')}}">Se connecter</a>
+					</li>
+				</ul>
+			{% endif %}
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item {% if app.request.attributes.get('_route') == 'profil_utilisateur' %}active{% endif %}">
+						<a class="nav-link" href="{{path('profil_utilisateur')}}">
+							<i class="fas fa-user"></i>&nbsp;Profil</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{path('app_logout')}}">
+							<i class="fas fa-sign-out-alt"></i>
+						</a>
+					</li>
+				</ul>
+			{% endif %}
+		</div>
+	</nav>
+	{% block contenu %}{% endblock %}
+
+	<!-- Footer -->
+	<footer class="mt-5">
+		<nav class="navbar navbar-expand-lg navbar-light bg-arrierePlan">
+			<ul class="navbar-nav mx-auto">
+				<li class="nav-item">
+					<span class="nav-link">© 2020 Copyright :
+					<a href="https://https://www.prepavenir-formation.fr/">prepavenir-formation.fr</a></span>
+				</li>
+			</ul>
+		</nav>
+	</footer>
+		<!-- Copyright -->
+	<!-- Footer -->
+
+{% endblock %}

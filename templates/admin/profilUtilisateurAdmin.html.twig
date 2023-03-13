@@ -1,0 +1,63 @@
+{% extends 'modeles/adminModele.html.twig' %}
+
+{% block contenu %}
+	<div class="container">
+		{% for message in app.flashes('notice') %}
+			<div class="flash-notice alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+		{% if "ROLE_USER" in utilisateur.roles %}
+			<div class="mt-3 text-right">
+				<a type="button" class="btn btn-outline-secondary" href="{{path('ajouter_modules_apprenant', {'id' : utilisateur.id } )}}">
+					<i class="fas fa-plus"></i>&nbsp;Affecter un module</a>
+			</div>
+		{% endif %}
+		<div class="text-center">
+			<div class="card mt-3 mx-auto" style="width: 18rem;">
+				<div class="card-body">
+					<h5 class="card-title">Profil utilisateur</h5>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">Mail :
+						{{ utilisateur.email }}</li>
+					<li class="list-group-item">Nom :
+						{{ utilisateur.nom }}</li>
+					<li class="list-group-item">Prénom :
+						{{ utilisateur.prenom }}</li>
+					<li class="list-group-item">
+						{% for role in utilisateur.roles %}
+							<span>Roles :
+								{{ role }}</span>
+						{% endfor %}
+					</li>
+				</ul>
+			</div>
+			{% if "ROLE_USER" in utilisateur.roles %}
+				<div class="card mt-3 mx-auto" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Modules suivies</h5>
+					</div>
+					<ul class="list-group list-group-flush">
+						{% for module in utilisateur.apprenant.modules %}
+							<li class="list-group-item">
+								{{ module.nom }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+			{% if "ROLE_FORMATEUR" in utilisateur.roles %}
+				<div class="card mt-3 mx-auto" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">Modules créés</h5>
+					</div>
+					<ul class="list-group list-group-flush">
+						{% for module in utilisateur.formateur.modules %}
+							<li class="list-group-item">
+								{{ module.nom }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+			{% endif %}
+		</div>
+	{%  endblock %}

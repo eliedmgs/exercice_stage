@@ -1,0 +1,77 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+	<div class="row mt-3">
+		<div class="col-8 container">
+			<div class="text-center">
+				<h1>{{ module.nom }}</h1>
+			</div>
+			<div>Bonne réponse = 2 points</div>
+			<div>Mauvaise réponse = -1 point</div>
+			<div>Pas de réponse = 0 point</div>
+			{% for question1 in qcmQuestions %}
+				<hr>
+				<div>{{ question1.question }}
+					:</div>
+				{{ form_start(form) }}
+				{% for reponse in form.qcmReponses %}
+					{% for qcmReponse in qcmReponses %}
+						{% if qcmReponse.id == reponse.vars.value %}
+							{% if qcmReponse.qcmQuestion.id == question1.id %}
+								<div class="form-group mt-3">
+									<div class="form-check">
+										{{ form_widget(reponse, {'attr': {'class': 'form-check-input'}}) }}
+										{{ form_label(reponse) }}
+									</div>
+								</div>
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+			{% endfor %}
+			</br>
+			{{ form_end(form) }}
+		</div>
+		<div class="col-3">
+
+			<div class="card">
+				<div class="card-body">
+					{% set nbCours = module.videos|length + module.pdfs|length + module.qcms|length %}
+					{% for ordre in 1 .. nbCours %}
+						{% for video in module.videos %}
+							{% if ordre == video.ordre %}
+								<a href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : video.id}) }}" class="card card-body">
+									{{video.ordre}}
+									.
+									{{video.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+						{% for pdf in module.pdfs %}
+							{% if ordre == pdf.ordre %}
+								<a href="{{path('cours_pdf_apprenant', {'id' : module.id, 'idFile' : pdf.id}) }}" class="card card-body">
+									{{pdf.ordre}}
+									.
+									{{pdf.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+
+						{% for qcm1 in module.qcms %}
+							{% if ordre == qcm1.ordre %}
+								<a href="{{path('cours_qcm_apprenant', {'id' : module.id, 'idFile' : qcm1.id}) }}" class="card card-body {% if app.request.attributes.get('_route') == 'cours_qcm_apprenant' and qcm1.id == qcm.id %}text-secondary{% endif %}">
+									{{qcm1.ordre}}
+									.
+									{{qcm1.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

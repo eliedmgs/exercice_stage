@@ -1,0 +1,171 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+ 
+{% block contenu %}
+    {% set bareme = qcmQuestions|length * 2 %}
+    {% set noteApprenant = 0 %}
+    <div class="row mt-3">
+        <div class="col-8 container">
+            <div class="text-center">
+                <h1>{{ module.nom }}</h1>              
+            </div>
+ 
+           
+            {% for question in qcmQuestions %}
+                {% set point = 0 %}
+                {% set nbRep = 0 %}
+                {% for reponseA in apprenant.qcmReponses %}
+                    {% if reponseA.qcmQuestion == question %}
+                        {% set nbRep = nbRep + 1 %}
+                    {% endif %}
+                {% endfor %}
+                {% if nbRep != 0 %}
+                    {% set mauvaiseRep = false %}
+                    {% set bonneRep = 0 %}
+                    {% set bonneRepA = 0 %}
+                    {% for reponse in question.qcmReponses %}
+                        {% if reponse.bonneReponse %}
+                            {% set bonneRep = bonneRep + 1 %}
+                        {% endif %}
+                        {% if reponse in apprenant.qcmReponses %}
+                            {% if reponse.bonneReponse %}
+                                {% set bonneRepA = bonneRepA + 1 %}
+                            {% else %}
+                                {% set mauvaiseRep = true %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if mauvaiseRep %}
+                        {% set point = - 1 %}
+                    {% elseif bonneRepA == bonneRep %}
+                        {% set point = 2 %}
+                    {% else %}   
+                        {% set point = - 1 %}
+                    {% endif %}
+                {% endif %}
+                {% set noteApprenant = noteApprenant + point %}
+            {% endfor %}
+ 
+            <h3 class="mt-3 text-primary">
+                {% if noteApprenant < (bareme * 0.70)|round(0, 'ceil') %}
+                    Vous avez obtenu une note de {{ noteApprenant }}/{{ bareme }},</br>  veuillez réessayer.  
+                {% else %}
+                    Félicitation ! Vous avez obtenu une note de  {{ noteApprenant }}/{{ bareme }},</br> vous pouvez passer à l'étape suivante.
+                {% endif %} 
+            </h3>
+
+            {% for question in qcmQuestions %}
+                {% set nbRep = 0 %}
+                {% for reponseA in apprenant.qcmReponses %}
+                    {% if reponseA.qcmQuestion == question %}
+                        {% set nbRep = nbRep + 1 %}
+                    {% endif %}
+                {% endfor %}
+                <hr>
+                <div>{{ question.question }} : 
+                {% if nbRep != 0 %}
+                    {% set mauvaiseRep = false %}
+                    {% set bonneRep = 0 %}
+                    {% set bonneRepA = 0 %}
+                    {% for reponse in question.qcmReponses %}
+                        {% if reponse.bonneReponse %}
+                            {% set bonneRep = bonneRep + 1 %}
+                        {% endif %}
+                        {% if reponse in apprenant.qcmReponses %}
+                            {% if reponse.bonneReponse %}
+                                {% set bonneRepA = bonneRepA + 1 %}
+                            {% else %}
+                                {% set mauvaiseRep = true %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if mauvaiseRep %}
+                        <i class="fas fa-times text-danger"></i>&nbsp; (-1 point)
+                    {% elseif bonneRepA == bonneRep %}
+                        <i class="fas fa-check text-success"></i>&nbsp; (+2 points)
+                    {% else %}   
+                        <i class="fas fa-times text-danger"></i>&nbsp; (-1 point)
+                    {% endif %}
+                {% else %}   
+                    <i class="fas fa-times text-danger"></i>&nbsp; (0 point) 
+                {% endif %}
+    
+                </div>
+                {% for reponse in question.qcmReponses %}    
+                    <div class="{% if reponse in apprenant.qcmReponses %}text-primary{% endif %}">
+                        {{ reponse.reponse }}   
+                    </div>
+                {% endfor %}
+            {% endfor %}   
+           
+            <div class="mt-3">
+                {% if noteApprenant < (bareme * 0.70)|round(0, 'ceil') %}
+                    <a type="button" href="{{path('cours_qcm_apprenant', {'id' : module.id, 'idFile' : qcm.id}) }}" class="btn btn-secondary">Réessayer</a>
+                {% else %}    
+                    <a type="button"
+                        {% for video in module.videos %}
+                            {% if video.ordre == qcm.ordre + 1 %}
+                                href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : video.id}) }}"
+                            {% endif %}
+                        {% endfor %}
+                        {% for qcm in module.qcms %}
+                            {% if qcm.ordre == qcm.ordre + 1 %}
+                                href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : qcm.id}) }}"
+                            {% endif %}
+                        {% endfor %}
+                        {% for pdf in module.pdfs %}
+                            {% if pdf.ordre == qcm.ordre + 1 %}
+                                href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : pdf.id}) }}"
+                            {% endif %}    
+                        {% endfor %}
+                        class="btn btn-secondary">Suivant</a>
+                {% endif %}        
+            </div>
+        </div>
+       
+ 
+ 
+        <div class="col-3">
+ 
+            <div class="card">
+                <div class="card-body">
+                    {% set nbCours = module.videos|length + module.pdfs|length + module.qcms|length %}
+                    {% for ordre in 1 .. nbCours %}
+                        {% for video in module.videos %}
+                            {% if ordre == video.ordre %}
+                                <a href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : video.id}) }}" class="card card-body">
+                                    {{video.ordre}}
+                                    .
+                                    {{video.nom}}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        {% for pdf in module.pdfs %}
+                            {% if ordre == pdf.ordre %}
+                                <a href="{{path('cours_pdf_apprenant', {'id' : module.id, 'idFile' : pdf.id}) }}" class="card card-body">
+                                    {{pdf.ordre}}
+                                    .
+                                    {{pdf.nom}}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+ 
+                        {% for qcm1 in module.qcms %}
+                            {% if ordre == qcm1.ordre %}
+                                <a href="{{path('cours_qcm_apprenant', {'id' : module.id, 'idFile' : qcm1.id}) }}" class="card card-body
+                                {% if app.request.attributes.get('_route') == 'resultat_qcm_apprenant' and qcm1.id == qcm.id %}
+                                    text-secondary
+                                {% endif %}">
+                                    {{qcm1.ordre}}
+                                    .
+                                    {{qcm1.nom}}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+ 
+        </div>
+    </div>
+ 
+{% endblock %}

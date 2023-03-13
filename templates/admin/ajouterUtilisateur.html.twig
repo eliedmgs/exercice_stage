@@ -1,0 +1,62 @@
+{% extends 'modeles/adminModele.html.twig' %}
+{% block contenu %}
+<h1 class="text-center mt-3">Ajouter un utilisateur</h1>
+
+<div class="container col-4 mt-3">
+    {{ form_start(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.email, 'Email :') }}
+        {% if form_errors(form.email) == null %}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        {% else %}
+        {{ form_widget(form.email, {'attr': {'class': 'form-control is-invalid'}}) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.email) }}
+        </div>
+        {% endif %}
+    </div>
+
+
+    <div class="form-group">
+        {{ form_label(form.nom, 'Nom :') }}
+        {% if form_errors(form.nom) == null %}
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+        {% else %}
+        {{ form_widget(form.nom, {'attr': {'class': 'form-control is-invalid'}}) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.nom) }}
+        </div>
+        {% endif %}
+    </div>
+
+
+    <div class="form-group">
+        {{ form_label(form.prenom, 'Prénom :') }}
+        {% if form_errors(form.prenom) == null %}
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+        {% else %}
+        {{ form_widget(form.prenom, {'attr': {'class': 'form-control is-invalid'}}) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.prenom) }}
+        </div>
+        {% endif %}
+    </div>
+
+
+    <div class="form-group">
+        {{ form_label(form.plainPassword, 'Mot de passe :') }}
+        {% if form_errors(form.plainPassword) == null %}
+        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control'}}) }}
+        {% else %}
+        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control is-invalid'}}) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.plainPassword) }}
+        </div>
+        {% endif %}
+    </div>
+
+    {{form_end(form)}}
+</div>
+
+{% endblock %}

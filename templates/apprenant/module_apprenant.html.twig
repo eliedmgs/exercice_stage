@@ -1,0 +1,76 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+
+	<div class="row">
+		<div class="col-8 container text-center mt-3">
+			<div class="text-center">
+				<h1>{{ module.nom }}</h1>
+			</div>
+			<h2 class="my-4">Bienvenue sur le module
+				{{ module.nom }}</h2>
+			{% for video in module.videos %}
+				{% if video.ordre == 1 %}
+					<a href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : video.id}) }}" type="button" class="btn btn-secondary">
+						Commencer
+					</a>
+				{% endif %}
+			{% endfor %}
+			{% for pdf in module.pdfs %}
+				{% if pdf.ordre == 1 %}
+					<a href="{{path('cours_pdf_apprenant', {'id' : module.id, 'idFile' : pdf.id}) }}" type="button" class="btn btn-secondary">
+						Commencer
+					</a>
+				{% endif %}
+			{% endfor %}
+			{% for qcm in module.qcms %}
+				{% if qcm.ordre == 1 %}
+					<a href="{{path('cours_qcm_apprenant', {'id' : module.id, 'idFile' : qcm.id}) }}" type="button" class="btn btn-secondary">
+						Commencer
+					</a>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="col-3">
+
+			<div class="card">
+				<div class="card-body">
+					{% set nbCours = module.videos|length + module.pdfs|length + module.qcms|length %}
+					{% for ordre in 1 .. nbCours %}
+						{% for video in module.videos %}
+							{% if ordre == video.ordre %}
+								<a href="{{path('cours_video_apprenant', {'id' : module.id, 'idFile' : video.id}) }}" class="card card-body">
+									{{video.ordre}}
+									.
+									{{video.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+						{% for pdf in module.pdfs %}
+							{% if ordre == pdf.ordre %}
+								<a href="{{path('cours_pdf_apprenant', {'id' : module.id, 'idFile' : pdf.id}) }}" class="card card-body">
+									{{pdf.ordre}}
+									.
+									{{pdf.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+
+						{% for qcm in module.qcms %}
+							{% if ordre == qcm.ordre %}
+								<a href="{{path('cours_qcm_apprenant', {'id' : module.id, 'idFile' : qcm.id}) }}" class="card card-body">
+									{{qcm.ordre}}
+									.
+									{{qcm.nom}}
+								</a>
+							{% endif %}
+						{% endfor %}
+					{% endfor %}
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+{% endblock %}

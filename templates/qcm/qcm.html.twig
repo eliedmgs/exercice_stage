@@ -1,0 +1,93 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+{% block title %}
+	Q.C.M
+{% endblock %}
+{% block contenu %}
+	<!--**********************************************************AFFICHAGE QCM ACORDEON*************************************************-->
+	<br><br><br>
+	<h1 class="text-center">Q.C.M</h1>
+	<h2 class="text-center">{{ qcm.nom }}</h2>
+	
+	<div class="container">
+		<div class="text-right">
+		<a href="{{path('ajout_question_qcm', { 'id' : qcm.id }) }}" class="btn btn-outline-danger">
+			<span class="fas fa-plus"></span>&nbsp; Question
+		</a>
+		</div>
+		</br>
+		{% for question in qcm.qcmQuestions %}
+			<div class="accordion">
+				<div class="card">
+					<div class="card-header" id="headingOne">
+							<div class="row">
+								<div class="col-9">
+									<button class="btn btn-link " type="button" data-toggle="collapse" data-target="#question{{ question.id }}" aria-expanded="true" aria-controls="question{{ question.id }}">
+										{{ question.question }}
+									</button>
+								</div>
+								<div>
+									<span class="text-right">
+										<a href="{{path('ajout_reponse_qcm', { 'id' : question.id }) }}" class="btn btn-outline-secondary">
+											<span class="fas fa-plus"></span>&nbsp; Réponse(s)
+										</a>
+										<a href="{{path('modifier_question_qcm', { 'id' : question.id }) }}" class="btn btn-outline-dark">
+											<span class="fas fa-edit"></span>
+										</a>
+										<a href="{{path('supprimer_question_qcm', { 'id' : question.id }) }}" class="btn btn-outline-danger">
+											<span class="fas fa-trash-alt"></span>
+										</a>
+									</span>
+								</div>
+							</div>
+					</div>
+					<div id="question{{ question.id }}" class="collapse" aria-labelledby="headingOne">
+						<div class="card-body">
+
+
+							{% for reponse in question.qcmReponses %}
+								<div class="row">
+									<div class="col-11">
+										<span>{{ reponse.reponse }}</span>
+
+										{% if reponse.bonneReponse %}
+											<span class="fas fa-check text-success"></span>
+										{% else %}
+											<span class="fas fa-times text-danger"></span>
+
+										{% endif %}
+									</div>
+									<div>
+										<span>
+											<a href="{{path('modifier_reponse_qcm', { 'id' : reponse.id }) }}" class="btn btn-outline-dark">
+												<span class="fas fa-edit"></span>
+											</a>
+											<a href="{{path('supprimer_reponse_qcm', { 'id' : reponse.id }) }}" class="btn btn-outline-danger">
+												<span class="fas fa-trash-alt"></span>
+											</a>
+										</span>
+									</div>
+								</div>
+								<hr>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<div class="container mt-3">
+		{% for question in qcm.qcmQuestions %}
+			<p> {{ question.question }} </p>
+			{% for reponse in question.qcmReponses %}
+			<div class="form-check">
+				<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+				<label class="form-check-label" for="defaultCheck1">
+					{{ reponse.reponse }}
+				</label>
+			</div>
+			{% endfor %}
+			</br><hr>
+		{% endfor %}
+	</div>
+	
+{% endblock %}

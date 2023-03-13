@@ -1,0 +1,213 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+	<div class="container"><hr><br><br>
+		{% for message in app.flashes('notice') %}
+			<div class="flash-notice alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		<h1 class="text-center">{{ module.nom }}
+			<a href="{{path('ajouter_video', { 'id' : module.id }) }}" class="btn btn-outline-secondary">
+				<span class="fas fa-plus"></span>&nbsp; Video
+			</a>
+			<a href="{{path('ajout_qcm', { 'id' : module.id }) }}" class="btn btn-outline-secondary">
+				<span class="fas fa-plus"></span>&nbsp; QCM
+			</a>
+			<a href="{{path('ajout_pdf', { 'id' : module.id }) }}" class="btn btn-outline-secondary">
+				<span class="fas fa-plus"></span>&nbsp; PDF
+			</a>
+		</h1>
+
+		<table class="table mt-3">
+			<thead>
+				<tr>
+					<th scope="col">Type</th>
+					<th scope="col">Fichier</th>
+					<th scope="col">Ordre</th>
+					<th scope="col">Q&A</th>
+					<th scope="col" class="text-right">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% set nbCours = module.videos|length + module.pdfs|length + module.qcms|length %}
+				{% for ordre in 1 .. nbCours %}
+					{% for pdf in module.pdfs %}
+						{% if ordre == pdf.ordre %}
+							<tr>
+								<td class="align-middle">PDF</td>
+								<td class="align-middle">
+									<a href="{{ asset('assets/pdf/modules/file'~ pdf.id ~ '.pdf') }}">
+										{{ pdf.nom }}
+									</a>
+								</td>
+								<td>
+									<div class="row">
+										<div class="col-3 pt-4">{{ pdf.ordre }}</div>
+										<div class="col-3">
+											<a href="{{path('ordre_moins_pdf', {'id' : pdf.id } )}}" class="btn btn-outline-secondary">
+												<i class="fas fa-chevron-up"></i>
+											</a>
+											<a href="{{path('ordre_plus_pdf', {'id' : pdf.id } )}}" class="btn btn-outline-secondary">
+												<i class="fas fa-chevron-down"></i>
+											</a>
+										</div>
+									</div>
+								</td>
+								<td class="align-middle">Afficher</td>
+								<td class="text-right align-middle">
+									<a href="{{path('modifier_pdf', {'id' : pdf.id } )}}" class="btn btn-outline-dark">
+										<i class="fas fa-edit"></i>
+									</a>
+									<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerPdf{{pdf.id}}">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</td>
+
+								<!--*****************************     MODAL SUPPRIMER PDF    *****************************-->
+
+								<div class="modal fade" id="supprimerPdf{{pdf.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerPdfLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="supprimerPdfLabel">Etes-vous sûrs de vouloir supprimer le PDF ?</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+												<a href="{{path('supprimer_pdf', {'id' : pdf.id } )}}">
+													<button type="button" class="btn btn-outline-primary">Oui</button>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!--*****************************     MODAL SUPPRIMER PDF    *****************************-->
+
+							</tr>
+						{% endif %}
+					{% endfor %}
+					{% for video in module.videos %}
+						{% if ordre == video.ordre %}
+
+							<tr>
+								<td class="align-middle">Video</td>
+								<td class="align-middle">
+									<a href="{{ asset('assets/videos/modules/file'~ video.id ~'.'~ video.extension) }}">
+										{{ video.nom }}
+									</a>
+								</td>
+								<td class="align-middle">
+									<div class="row">
+										<div class="col-3 pt-4">{{ video.ordre }}</div>
+										<div class="col-3">
+											<a href="{{path('ordre_moins_video', {'id' : video.id } )}}" class="btn btn-outline-secondary">
+												<i class="fas fa-chevron-up"></i>
+											</a>
+											<a href="{{path('ordre_plus_video', {'id' : video.id } )}}" class="btn btn-outline-secondary">
+												<i class="fas fa-chevron-down"></i>
+											</a>
+										</div>
+									</div>
+								</td>
+								<td class="align-middle">Afficher</td>
+								<td class="text-right align-middle">
+									<a href="{{path('modifier_video', {'id' : video.id } )}}" class="btn btn-outline-dark">
+										<i class="fas fa-edit"></i>
+									</a>
+									<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerVideo{{video.id}}">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</td>
+
+								<!--*****************************     MODAL SUPPRIMER VIDEO    *****************************-->
+								<div class="modal fade" id="supprimerVideo{{video.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerVideoLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="supprimerVideoLabel">Etes-vous sûrs de vouloir supprimer la video ?</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+												<a href="{{path('supprimer_video', {'id' : video.id } )}}">
+													<button type="button" class="btn btn-outline-primary">Oui</button>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--*****************************     MODAL SUPPRIMER VIDEO    *****************************-->
+
+							</tr>
+						{% endif %}
+					{% endfor %}
+					{% for qcm in module.qcms %}
+						{% if ordre == qcm.ordre %}
+							<tr>
+								<td class="align-middle">QCM</td>
+								<td class="align-middle">
+									<a href="{{ path('qcm', {'id' : qcm.id}) }}">
+										{{ qcm.nom }}
+									</a>
+								</td>
+								<td class="align-middle">
+									<div class="row">
+										<div class="col-3 pt-4">{{ qcm.ordre }}</div>
+										<div class="col-3">
+											<a href="{{path('ordre_moins_qcm', {'id' : qcm.id } )}}" class="btn btn-outline-secondary">
+												<i class="fas fa-chevron-up"></i>
+											</a>
+											<a href="{{path('ordre_plus_qcm', {'id' : qcm.id } )}}" class="btn btn-outline-secondary">
+												<i class="fas fa-chevron-down"></i>
+											</a>
+										</div>
+									</div>
+								</td>
+								<td class="align-middle"></td>
+								<td class="text-right align-middle">
+									<a href="{{path('modifier_qcm', {'id' : qcm.id } )}}" class="btn btn-outline-dark">
+										<i class="fas fa-edit"></i>
+									</a>
+
+									<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerQcm{{qcm.id}}">
+										<i class="fas fa-trash-alt"></i>
+									</button>
+								</td>
+
+								<!--*****************************     MODAL SUPPRIMER QCM    *****************************-->
+								<div class="modal fade" id="supprimerQcm{{qcm.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerQcmLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title text-center" id="supprimerQcmLabel">Etes-vous sûrs de vouloir supprimer le QCM ?</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+												<a href="{{path('supprimer_qcm', {'id' : qcm.id } )}}">
+													<button type="button" class="btn btn-outline-primary">Oui</button>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--*****************************     MODAL SUPPRIMER QCM    *****************************-->
+
+							</tr>
+						{% endif %}
+					{% endfor %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

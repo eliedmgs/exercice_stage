@@ -1,0 +1,127 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+	{% for message in app.flashes('notice') %}
+		<div class="flash-notice alert alert-success">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+
+	<br>
+	<h1 class="text-center">Q&A</h1>
+
+
+	<div class="container"><br><br>
+		<h4 class="text-center">{{ module.nom }}</h4>
+		<table class="table" id="monTableau">
+			<thead>
+				<tr>
+					<th scope="col">Chapitre</th>
+					<th scope="col">Questions</th>
+					<th scope="col">Reponses</th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for video in module.videos %}
+					{% for question in video.moduleQuestions %}
+						<tr>
+							<td class="align-middle">{{ video.nom }}</td>
+							<td class="align-middle">{{ question }}</td>
+							<td class="align-middle">
+								{% for reponse1 in question.moduleReponses %}
+									<div>{{ reponse1.reponse }}
+										<a type="button" href="{{path('modifier_module_reponse', { 'id' : module.id , 'idReponse' : reponse1.id })}}" class="btn btn-outline-dark">
+											<span class="fas fa-edit"></span>
+										</a>
+										<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerReponse{{reponse1.id}}">
+											<span class="fas fa-trash-alt"></span>
+										</button>
+									</div>
+
+									<div class="modal fade" id="supprimerReponse{{reponse1.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerReponseLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title text-center" id="supprimerModuleLabel">
+														Etes-vous sûrs de vouloir supprimer la réponse ?
+													</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+													<a href="{{path('supprimer_module_reponse', { 'id' : module.id , 'idReponse' : reponse1.id })}}">
+														<button type="button" class="btn btn-outline-primary">Oui</button>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</td>
+							<td class="align-middle">
+								<div>
+									<a type="button" class="btn btn-outline-secondary" href="{{path('ajouter_module_reponse', { 'id' : module.id , 'idQuestion' : question.id })}}">
+										<i class="fas fa-plus"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				{% endfor %}
+				{% for pdf in module.pdfs %}
+					{% for question in pdf.moduleQuestions %}
+						<tr>
+							<td class="align-middle">{{ pdf.nom }}</td>
+							<td class="align-middle">{{ question }}</td>
+							<td class="align-middle">
+								{% for reponse1 in question.moduleReponses %}
+									<div>{{ reponse1.reponse }}
+										<a type="button" href="{{path('modifier_module_reponse', { 'id' : module.id , 'idReponse' : reponse1.id })}}" class="btn btn-outline-dark">
+											<span class="fas fa-edit"></span>
+										</a>
+										<button class="btn btn-outline-danger" data-toggle="modal" data-target="#supprimerReponse{{reponse1.id}}">
+											<span class="fas fa-trash-alt"></span>
+										</button>
+									</div>
+
+									<div class="modal fade" id="supprimerReponse{{reponse1.id}}" tabindex="-1" role="dialog" aria-labelledby="supprimerReponseLabel" aria-hidden="true">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title text-center" id="supprimerModuleLabel">
+														Etes-vous sûrs de vouloir supprimer la réponse ?
+													</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Non</button>
+													<a href="{{path('supprimer_module_reponse', { 'id' : module.id , 'idReponse' : reponse1.id })}}">
+														<button type="button" class="btn btn-outline-primary">Oui</button>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
+							</td>
+							<td class="align-middle">
+								<div>
+									<a type="button" class="btn btn-outline-secondary" href="{{path('ajouter_module_reponse', { 'id' : module.id , 'idQuestion' : question.id })}}">
+										<i class="fas fa-plus"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</tbody>
+</div>{% endblock %}

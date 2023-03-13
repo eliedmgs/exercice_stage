@@ -1,0 +1,30 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+<br>
+<h1 class="text-center">MODIFIER REPONSE</h1>
+
+
+
+<div class="container mt-3">
+	{{ form_start(form) }}
+	<div class="form-group">
+		<div>
+			{{ form_label(form.reponse, "Reponse:")}}
+			{% if form_errors(form.reponse) == null %}
+			{{ form_widget(form.reponse) }}
+			{% else %}
+			{{ form_widget(form.reponse, {'attr': {'class': 'form-control is-invalid'}}) }}
+			<div class="invalid-feedback">{{form_errors(form.reponse)}}</div>
+			{% endif %}
+		</div>
+	</div>
+	{{ form_end(form) }}
+</div>
+
+
+
+
+
+{% endblock %}

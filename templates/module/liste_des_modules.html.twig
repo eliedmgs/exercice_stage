@@ -1,0 +1,67 @@
+{% extends 'modeles/principaleModele.html.twig' %}
+
+{% block contenu %}
+
+<br>
+<h1 class="text-center">Liste des cours</h1>
+
+<div class="container"><hr><br>
+
+
+{% for module in modules %}
+<div class="card-group row">
+    <div class="col-2">
+        <div class="card-img-body mt-3">
+            {% if module.image != null %}
+                <a href="{{path('module_description', {'id' : module.id}) }}"><img src="{{asset('assets/img/modules/imgModule'~ module.id ~'.'~ module.extension)}}" alt="Card image cap" height="150em" width="200em"></a>
+            {% else %}
+                <a href="{{path('module_description', {'id' : module.id}) }}"><img src="{{asset('assets/img/formation.jpg')}}" height="150em" width="200em"></a>
+            {% endif %}    
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="card-body mt-3">
+            <h4 class="card-title"><a href="{{ path('module_description', {'id': module.id}) }}">{{module.nom}}</a></h4>
+            <p class="card-text">{{module.MiniDescription}}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
