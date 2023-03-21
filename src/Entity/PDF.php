@@ -8,68 +8,55 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\PDFRepository")
- */
+
+#[ORM\Entity(repositoryClass: PDFRepository::class)]
 class PDF
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le nom doit au moins contenir {{ limit }} caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères"
-     * )
-     * @Assert\NotBlank(
-     *      message = "Le nom doit être renseigné"
-     * )
-     */
-    private $nom;
+    
+     #[ORM\Column(length: 255)]
+     #[Assert\Length(
+           min: 2,
+           max: 50,
+           minMessage: "Le nom doit au moins contenir {{ limit }} caractères",
+           maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères"
+      )]
+    #[Assert\NotBlank(
+          message: "Le nom doit être renseigné"
+      )]
+    private ?string $nom = null;
 
-    /** 
-     * @ORM\Column(type="string", length=4, nullable=true)
-     */
-    private $extension;
+     
+    #[ORM\Column(length: 4, nullable: true)]
+    private ?sting $extension;
+ 
+     #[ORM\Column(nullable: true)]
+     #[Assert\File(
+          maxSize: "5M",
+          mimeTypes: ["application/pdf"],
+          mimeTypesMessage: "Merci de télécharger un fichier de type pdf"
+     )]
+    private ?string $file;
 
-    /**
-     * 
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\File(
-     *     maxSize = "5M",
-     *     mimeTypes = { "application/pdf" },
-     *     mimeTypesMessage = "Merci de télécharger un fichier de type pdf"
-     * )
-     */
-    private $file;
+     
+     #[ORM\Column(nullable: true)]
+    private ?int $ordre;
 
-    /** 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $ordre;
+    
+     #[ORM\ManyToMany(targetEntity: Apprenant::class, mappedBy:"pdfs")] 
+    private Collection $apprenants;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Apprenant", mappedBy="pdfs")
-     */ 
-    private $apprenants;
+    
+     #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: "pdfs")] 
+    private ?Module $module;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Module", inversedBy="pdfs")
-     */ 
-    private $module;
-
-    /**
-     * @ORM\OneToMany(targetEntity="ModuleQuestion", mappedBy="pdf")
-     */ 
-    private $moduleQuestions;
+    
+     #[ORM\OneToMany(targetEntity: ModuleQuestion::class, mappedBy: "pdf")]
+    private Collection $moduleQuestions;
 
     public function __construct()
     {

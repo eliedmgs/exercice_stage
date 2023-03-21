@@ -7,36 +7,29 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\QCMQuestionRepository")
- */
+
+#[ORM\Entity(repositoryClass: QCMQuestionRepository::class)]
 class QCMQuestion
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank(
-     *      message = "La question doit être renseignée"
-     * )
-     */
-    private $question;
+    
+     #[ORM\Column(length: 255)]  
+     #[Assert\NotBlank(
+           message: "La question doit être renseignée"
+      )]
+    private ?string $question = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="QCMReponse", mappedBy="qcmQuestion", cascade={"persist", "remove"})
-     */ 
-    private $qcmReponses;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="QCM", inversedBy="qcmQuestions")
-     */ 
-    private $qcm;
+     #[ORM\OneToMany(targetEntity: QCMReponse::class, mappedBy: "qcmQuestion", cascade: ["persist", "remove"])] 
+    private Collection $qcmReponses;
+
+    
+    #[ORM\ManyToOne(targetEntity: QCM::class, inversedBy: "qcmQuestions")]
+    private Collection $qcm;
 
     public function __construct()
     {

@@ -7,42 +7,34 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\QCMReponseRepository")
- */
+#[ORM\Entity(repositoryClass: QCMReponseRepository::class)] 
 class QCMReponse
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank(
-     *      message = "La réponse doit être renseignée"
-     * )
-     */
-    private $reponse;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $bonneReponse;
-
-     /**
-     * @ORM\ManyToMany(targetEntity="Apprenant", mappedBy="qcmReponses")
-     */ 
-    private $apprenants;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+    private ?int $id = null;
 
     
-    /**
-     * @ORM\ManyToOne(targetEntity="QCMQuestion", inversedBy="qcmReponses")
-     */ 
-    private $qcmQuestion;
+     #[ORM\Column(length: 255)]
+      
+      #[Assert\NotBlank(
+           message: "La réponse doit être renseignée"
+      )]
+    private ?string $reponse = null;
+
+    
+    #[ORM\Column]
+    private ?bool $bonneReponse;
+
+    
+    #[ORM\ManyToMany(targetEntity: Apprenant::class, mappedBy: "qcmReponses")] 
+    private Collection $apprenants;
+
+    
+    
+    #[ORM\ManyToOne(targetEntity: QCMQuestion::class, inversedBy: "qcmReponses")] 
+    private ?QCMQuestion $qcmQuestion = null;
 
     public function __construct()
     {

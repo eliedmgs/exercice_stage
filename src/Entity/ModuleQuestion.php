@@ -9,46 +9,38 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\AbstractTypeExtension;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ModuleQuestionRepository")
- */
+
+#[ORM\Entity(repositoryClass: ModuleQuestionRepository::class)]
 class ModuleQuestion
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank(
-     *      message = "La question doit être renseignée"
-     * )
-     */
-    private $question;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="PDF", inversedBy="moduleQuestions")
-     */ 
-    private $pdf;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Video", inversedBy="moduleQuestions")
-     */ 
-    private $video;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(
+          message: "La question doit être renseignée"
+      )]
+    private ?string $question = null;
 
-     /**
-     * @ORM\OneToMany(targetEntity="ModuleReponse", mappedBy="moduleQuestion")
-     */ 
-    private $moduleReponses;
+    
+    #[ORM\ManyToOne(targetEntity: PDF::class, inversedBy: "moduleQuestions")]
+    private ?PDF $pdf;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Apprenant", inversedBy="moduleQuestions")
-     */ 
-    private $apprenant;
+    
+    #[ORM\ManyToOne(targetEntity: Video::class, inversedBy: "moduleQuestions")] 
+    private ?Video $video;
+
+    
+    #[ORM\OneToMany(targetEntity: ModuleReponse::class, mappedBy: "moduleQuestion")] 
+    private Collection $moduleReponses;
+
+    
+    #[ORM\ManyToOne(targetEntity: Apprenant::class, inversedBy: "moduleQuestions")] 
+    private ?Apprenant $apprenant;
 
     public function __construct()
     {

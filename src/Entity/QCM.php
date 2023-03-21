@@ -7,49 +7,41 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\QCMRepository")
- */
+
+#[ORM\Entity(repositoryClass: QCMRepository::class)]
 class QCM
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le nom doit au moins contenir {{ limit }} caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères"
-     * )
-     * @Assert\NotBlank(
-     *      message = "Le nom doit être renseignée"
-     * )
-     */
-    private $nom;
+    
+     #[ORM\Column(length: 255)] 
+     #[Assert\Length(
+           min: 2,
+           max: 50,
+           minMessage: "Le nom doit au moins contenir {{ limit }} caractères",
+           maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères"
+      )]
+     #[Assert\NotBlank(
+           message: "Le nom doit être renseignée"
+      )]
+    private ?string $nom = null;
 
-    /** 
-     * @ORM\Column(type="integer")
-     */
-    private $ordre;
+     
+     #[ORM\Column]
+    private ?int $ordre = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="QCMQuestion", mappedBy="qcm", cascade={"persist", "remove"})
-     */ 
-    private $qcmQuestions;
+    
+     #[ORM\OneToMany(targetEntity: QCMQuestion::class, mappedBy: "qcm", cascade: ["persist", "remove"])] 
+    private Collection $qcmQuestions;
 
     
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Module", inversedBy="qcms")
-     */ 
-    private $module;
+    
+     #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: "qcms")] 
+    private ?Module $module;
 
     public function __construct()
     {

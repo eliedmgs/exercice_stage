@@ -5,37 +5,29 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ModuleReponseRepository")
- */
+#[ORM\Entity(repositoryClass: ModuleReponseRepository::class)]
 class ModuleReponse
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank(
-     *      message = "La réponse doit être renseignée"
-     * )
-     */
-    private $reponse;
+    
+     #[ORM\Column(length: 255)]
+     #[Assert\NotBlank(
+           message: "La réponse doit être renseignée"
+      )]
+    private ?string $reponse;
 
 
-     /**
-     * @ORM\ManyToOne(targetEntity="ModuleQuestion", inversedBy="moduleReponses")
-     */ 
-    private $moduleQuestion;
+    
+    #[ORM\ManyToOne(targetEntity: ModuleQuestion::class, inversedBy: "moduleReponses")] 
+    private ?ModuleQuestion $moduleQuestion;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Formateur", inversedBy="moduleReponses")
-     */ 
-    private $formateur;
+    
+    #[ORM\ManyToOne(targetEntity: Formateur::class, inversedBy: "moduleReponses")] 
+    private ?Formateur $formateur;
 
     public function getId(): ?int
     {

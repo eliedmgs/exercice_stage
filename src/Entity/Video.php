@@ -8,69 +8,57 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\VideoRepository")
- */
+
+ #[ORM\Entity(repositoryClass: VideoRepository::class)]
 class Video
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le nom doit au moins contenir {{ limit }} caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères"
-     * )
-     * @Assert\NotBlank(
-     *      message = "Le nom doit être renseignée"
-     * )
-     */
-    private $nom;
-
-    /** 
-     * @ORM\Column(type="string", length=4, nullable=true)
-     */
-    private $extension;
-
-    /** 
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $ordre;
-
-    /**
-     * 
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\File(
-     *     maxSize = "5000000000000",
-     *     mimeTypes = { "video/x-msvideo", "video/mpeg", "video/mp4" },
-     *     mimeTypesMessage = "Merci de télécharger un fichier de type avi, mp4 ou mpeg"
-     * )
-     */
-    private $file;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Apprenant", mappedBy="videos")
-     */ 
-    private $apprenants;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+    private ?int $id = null;
 
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Module", inversedBy="videos")
-     */ 
-    private $module;
+     #[ORM\Column(length: 255)]
+     #[Assert\Length(
+           min: 2,
+           max: 50,
+           minMessage: "Le nom doit au moins contenir {{ limit }} caractères",
+           maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères"
+      )]
+     #[Assert\NotBlank(
+           message: "Le nom doit être renseignée"
+      )]
+    private ?string $nom = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ModuleQuestion", mappedBy="video")
-     */ 
-    private $moduleQuestions;
+     
+     #[ORM\Column(length: 4, nullable: true)]
+    private ?string $extension;
+
+    
+     #[ORM\Column(nullable: true)]
+    private ?int $ordre;
+
+      
+      #[ORM\Column(nullable: true)]
+      #[Assert\File(
+          maxSize: "5000000000000",
+          mimeTypes: ["video/x-msvideo", "video/mpeg", "video/mp4"],
+          mimeTypesMessage: "Merci de télécharger un fichier de type avi, mp4 ou mpeg"
+      )]
+    private ?string $file;
+
+    
+     #[ORM\ManyToMany(targetEntity: Apprenant::class, mappedBy: "videos")] 
+    private Collection $apprenants;
+
+    
+    
+     #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: "videos")] 
+    private ?Module $module;
+
+    
+     #[ORM\OneToMany(targetEntity: ModuleQuestion::class, mappedBy: "video")] 
+    private Collection $moduleQuestions;
 
     public function __construct()
     {

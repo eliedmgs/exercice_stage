@@ -7,32 +7,25 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\FormateurRepository")
- */
+#[ORM\Entity(repositoryClass: FormateurRepository::class)]
 class Formateur
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Utilisateur", inversedBy="formateur", cascade={"persist"})
-     */ 
-    private $utilisateur;
+    #[ORM\OneToOne(targetEntity: Utilisateur::class, inversedBy: "formateur", cascade:["persist"])] 
+    private ?Utilisateur $utilisateur = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Module", mappedBy="formateur")
-     */ 
-    private $modules;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ModuleReponse", mappedBy="formateur")
-     */ 
-    private $moduleReponses;
+    #[ORM\OneToMany(targetEntity: Module::class, mappedBy: "formateur")]
+    private Collection $modules;
+
+    
+    #[ORM\OneToMany(targetEntity: ModuleReponse::class, mappedBy: "formateur")]
+    private Collection $moduleReponses;
 
 
     public function __construct()

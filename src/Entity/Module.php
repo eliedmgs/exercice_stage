@@ -7,97 +7,78 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ModuleRepository")
- */
+
+#[ORM\Entity(repositoryClass: ModuleRepository::class)]
 class Module
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le nom doit au moins contenir {{ limit }} caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères"
-     * )
-     * @Assert\NotBlank(
-     *      message = "Le nom doit être renseignée"
-     * )
-     */
-    private $nom;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank(
-     *      message = "La description doit être renseignée"
-     * )
-     */
-    private $description;
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+          min: 2,
+          max: 50,
+          minMessage: "Le nom doit au moins contenir {{ limit }} caractères",
+          maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères"
+     )]
+    #[Assert\NotBlank(
+          message: "Le nom doit être renseignée"
+     )]
+    private ?string $nom = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\NotBlank(
-     *      message = "La mini-description doit être renseignée"
-     * )
-     */
+    
+    #[ORM\Column(length:255)]
+    #[Assert\NotBlank(
+          message: "La description doit être renseignée"
+     )]
+    private ?string $description = null;
 
-    private $mini_description;
+    
+    #[ORM\Column(length: 255)] 
+    #[Assert\NotBlank(
+          message: "La mini-description doit être renseignée"
+     )]
+    private ?string $mini_description = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    
+    #[ORM\Column(nullable: true)]
+    private ?string $extension;
 
-    private $extension;
+    #[ORM\Column(nullable: true)]
+    #[Assert\File(
+         maxSize: "5M",
+         mimeTypes: ["image/jpeg","image/png","image/jpg"],
+         mimeTypesMessage: "Une image valide doit être requis"
+     )]
+    private ?string $image;
 
-    /**
-    * @ORM\Column(type="string", nullable=true)
-    * @Assert\File(
-    *     maxSize = "5M",
-    *     mimeTypes = {"image/jpeg","image/png","image/jpg"},
-    *     mimeTypesMessage = "Une image valide doit être requis"
-    * )
-    */
-    private $image;
+    
+    #[ORM\ManyToMany(targetEntity: Apprenant::class, mappedBy: "modules", cascade: ["persist", "remove"])]
+    private Collection $apprenants;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Apprenant", mappedBy="modules", cascade={"persist", "remove"})
-     */ 
-    private $apprenants;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Formateur", inversedBy="modules")
-     */ 
-    private $formateur;
+    #[ORM\ManyToOne(targetEntity: Formateur::class, inversedBy: "modules")] 
+    private ?Formateur $formateur;
 
-    /**
-     * @ORM\OneToMany(targetEntity="QCM", mappedBy="module", cascade={"persist", "remove"})
-     */ 
-    private $qcms;
+    
+    #[ORM\OneToMany(targetEntity: QCM::class, mappedBy: "module", cascade: ["persist", "remove"])]
+    private Collection $qcms;
 
-     /**
-     * @ORM\ManyToMany(targetEntity="Formation", inversedBy="modules")
-     */ 
-    private $formations;
+     
+    #[ORM\ManyToMany(targetEntity:Formation::class, inversedBy: "modules")]
+    private Collection $formations;
 
-    /**
-     * @ORM\OneToMany(targetEntity="PDF", mappedBy="module", cascade={"persist", "remove"})
-     */ 
-    private $pdfs;
 
-     /**
-     * @ORM\OneToMany(targetEntity="Video", mappedBy="module", cascade={"persist", "remove"})
-     */ 
-    private $videos;
+    #[ORM\OneToMany(targetEntity: PDF::class, mappedBy: "module", cascade: ["persist", "remove"])]
+    private Collection $pdfs;
+
+    
+    #[ORM\OneToMany(targetEntity: Video::class, mappedBy: "module", cascade: ["persist", "remove"])] 
+    private Collection $videos;
 
     public function __construct()
     {

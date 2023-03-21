@@ -7,43 +7,37 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\FormationRepository")
- */
+
+#[ORM\Entity(repositoryClass: FormationRepository::class)]
 class Formation
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le nom doit au moins contenir {{ limit }} caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères"
-     * )
-     * @Assert\NotBlank(
-     *      message = "Le nom doit être renseigné"
-     * )
-     */
-    private $nom;
+    
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(
+          min: 2,
+          max: 50,
+          minMessage: "Le nom doit au moins contenir {{ limit }} caractères",
+          maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères"
+     )]
+    #[Assert\NotBlank(
+          message: "Le nom doit être renseigné"
+     )]
+    private ?string $nom = null;
 
-     /**
-     * @ORM\ManyToMany(targetEntity="Module", mappedBy="formations")
-     */ 
-    private $modules;
+    
+    #[ORM\ManyToMany(targetEntity: Module::class, mappedBy: "formations")]
+    private Collection $modules;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="DomaineFormation", inversedBy="formations")
-     * 
-     * @ORM\JoinColumn(name="domaine_formation_id", referencedColumnName="id", onDelete="SET NULL")
-     */ 
-    private $domaineFormation;
+    
+    #[ORM\ManyToOne(targetEntity: DomaineFormation::class, inversedBy: "formations")]
+    #[ORM\JoinColumn(name:"domaine_formation_id", referencedColumnName:"id", onDelete:"SET NULL")]
+    private ?DomaineFormation $domaineFormation;
 
     public function __construct()
     {

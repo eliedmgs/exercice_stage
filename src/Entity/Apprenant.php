@@ -7,47 +7,39 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ApprenantRepository")
- */
+
+ #[ORM\Entity(repositoryClass: ApprenantRepository::class)]
+ 
 class Apprenant
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+      #[ORM\Id]
+      #[ORM\GeneratedValue]
+      #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Utilisateur", inversedBy="apprenant", cascade={"persist"})
-     */ 
-    private $utilisateur;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="PDF", inversedBy="apprenants")
-     */ 
-    private $pdfs;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Video", inversedBy="apprenants")
-     */ 
-    private $videos;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="QCMReponse", inversedBy="apprenants")
-     */ 
-    private $qcmReponses;
     
-    /**
-     * @ORM\ManyToMany(targetEntity="Module", inversedBy="apprenants")
-     */ 
-    private $modules;
+    #[ORM\OneToOne(inversedBy: "apprenant", cascade:["persist"])]
+    private ?Utilisateur $utilisateur;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ModuleQuestion", mappedBy="apprenant")
-     */ 
-    private $moduleQuestions;
+    
+    #[ORM\ManyToMany(targetEntity: PDF::class, inversedBy: "apprenants")]
+    private Collection $pdfs;
+
+    
+    #[ORM\ManyToMany(targetEntity: Video::class, inversedBy: "apprenants")]
+    private Collection $videos;
+
+    
+    #[ORM\ManyToMany(targetEntity: QCMReponse::class, inversedBy: "apprenants")]
+    private Collection $qcmReponses;
+    
+    
+    #[ORM\ManyToMany(targetEntity: Module::class, inversedBy: "apprenants")] 
+    private Collection $modules;
+
+    
+    #[ORM\OneToMany(targetEntity: ModuleQuestion::class, mappedBy: "apprenant")] 
+    private Collection $moduleQuestions;
 
     public function __construct()
     {

@@ -7,53 +7,44 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\DomaineFormationRepository")
- */
+
+#[ORM\Entity(repositoryClass: DomaineFormationRepository::class)] 
 class DomaineFormation
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+    
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * 
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 50,
-     *      minMessage = "Le nom doit au moins contenir {{ limit }} caractères",
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères"
-     * )
-     * @Assert\NotBlank(
-     *      message = "Le nom doit être renseignée"
-     * )
-     */
-    private $nom;
+    
+     #[ORM\Column(length:255)]
+     #[Assert\Length(
+          min: 2,
+          max: 50,
+          minMessage: "Le nom doit au moins contenir {{ limit }} caractères",
+          maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères"
+     )]
+     #[Assert\NotBlank(
+          message: "Le nom doit être renseignée",
+     )]
+    private ?string $nom = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    
+    #[ORM\Column(nullable: true)]
+    private ?string $extension;
 
-    private $extension;
 
-    /**
-    * @ORM\Column(type="string", nullable=true)
-    * @Assert\File(
-    *     maxSize = "5M",
-    *     mimeTypes = {"image/jpeg","image/png","image/jpg"},
-    *     mimeTypesMessage = "Une image valide doit être requis"
-    * )
-    */
-    private $image;
+    #[ORM\Column(nullable: true)]
+    #[Assert\File(
+         maxSize: "5M",
+         mimeTypes: ["image/jpeg","image/png","image/jpg"],
+         mimeTypesMessage: "Une image valide doit être requis"
+     )]
+    private ?string $image;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Formation", mappedBy="domaineFormation")
-     */ 
-    private $formations;
+    #[ORM\OneToMany(targetEntity: Formation::class, mappedBy: "domaineFormation")] 
+    private Collection $formations;
 
     public function __construct()
     {
