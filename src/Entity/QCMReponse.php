@@ -116,4 +116,9 @@ class QCMReponse
 
         return $this;
     }
+
+    public function isBonneReponse(): ?bool
+    {
+        return $this->bonneReponse;
+    }
 }

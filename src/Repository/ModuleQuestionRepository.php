@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<ModuleQuestion>
- * 
+ *
  * @method ModuleQuestion|null find($id, $lockMode = null, $lockVersion = null)
  * @method ModuleQuestion|null findOneBy(array $criteria, array $orderBy = null)
  * @method ModuleQuestion[]    findAll()
@@ -21,32 +21,46 @@ class ModuleQuestionRepository extends ServiceEntityRepository
         parent::__construct($registry, ModuleQuestion::class);
     }
 
-    // /**
-    //  * @return ModuleQuestion[] Returns an array of ModuleQuestion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(ModuleQuestion $entity, bool $flush = false): void
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $this->getEntityManager()->persist($entity);
 
-    /*
-    public function findOneBySomeField($value): ?ModuleQuestion
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
-    */
+
+    public function remove(ModuleQuestion $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+//    /**
+//     * @return ModuleQuestion[] Returns an array of ModuleQuestion objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('m')
+//            ->andWhere('m.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('m.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
+//    public function findOneBySomeField($value): ?ModuleQuestion
+//    {
+//        return $this->createQueryBuilder('m')
+//            ->andWhere('m.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

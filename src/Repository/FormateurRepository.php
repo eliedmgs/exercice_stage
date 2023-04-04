@@ -8,7 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Formateur>
- * 
+ *
  * @method Formateur|null find($id, $lockMode = null, $lockVersion = null)
  * @method Formateur|null findOneBy(array $criteria, array $orderBy = null)
  * @method Formateur[]    findAll()
@@ -21,32 +21,46 @@ class FormateurRepository extends ServiceEntityRepository
         parent::__construct($registry, Formateur::class);
     }
 
-    // /**
-    //  * @return Formateur[] Returns an array of Formateur objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function save(Formateur $entity, bool $flush = false): void
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $this->getEntityManager()->persist($entity);
 
-    /*
-    public function findOneBySomeField($value): ?Formateur
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
-    */
+
+    public function remove(Formateur $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+//    /**
+//     * @return Formateur[] Returns an array of Formateur objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->andWhere('f.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('f.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+
+//    public function findOneBySomeField($value): ?Formateur
+//    {
+//        return $this->createQueryBuilder('f')
+//            ->andWhere('f.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }
