@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: ModuleReponseRepository::class)]
+#[ORM\Entity(repositoryClass:"App\Repository\ModuleReponseRepository")]
 class ModuleReponse
 {
      #[ORM\Id]

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
- #[ORM\Entity(repositoryClass: VideoRepository::class)]
+ #[ORM\Entity(repositoryClass:"App\Repository\VideoRepository")]
 class Video
 {
      #[ORM\Id]

@@ -8,9 +8,18 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-#[ORM\Entity(repositoryClass: QCMQuestionRepository::class)]
+#[ORM\Entity(repositoryClass:"App\Repository\QCMQuestionRepository")]
 class QCMQuestion
 {
+    /**
+     * @var array BRANDS
+     */
+    public const DIFFICULTE = [
+        self::DIFFICULTE_FACILE,
+        self::DIFFICULTE_MOYENNE,
+        self::DIFFICULTE_DIFFICILE,
+    ];
+
      #[ORM\Id]
      #[ORM\GeneratedValue]
      #[ORM\Column]
@@ -23,6 +32,8 @@ class QCMQuestion
       )]
     private ?string $question = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $difficulte = null;
 
      #[ORM\OneToMany(targetEntity: QCMReponse::class, mappedBy: "qcmQuestion", cascade: ["persist", "remove"])] 
     private Collection $qcmReponses;
@@ -30,6 +41,23 @@ class QCMQuestion
     
     #[ORM\ManyToOne(targetEntity: QCM::class, inversedBy: "qcmQuestions")]
     private Collection $qcm;
+
+    
+    /**
+     * @var string DIFFICULTE_FACILE
+     */
+    public const DIFFICULTE_FACILE = 'Facile';
+
+    /**
+     * @var string DIFFICULTE_MOYENNE
+     */
+    public const DIFFICULTE_MOYENNE = 'Moyenne';
+
+    /**
+     * @var string DIFFICULTE_DIFFICILE
+     */
+    public const DIFFICULTE_DIFFICILE = 'Difficile';
+
 
     public function __construct()
     {
@@ -85,6 +113,18 @@ class QCMQuestion
         return $this;
     }
 
+    public function getDifficulte(): ?string
+    {
+        return $this->difficulte;
+    }
+
+    public function setDifficulte(string $difficulte): self
+    {
+        $this->difficulte = $difficulte;
+
+        return $this;
+    }
+
     public function getQcm(): ?QCM
     {
         return $this->qcm;
@@ -96,4 +136,5 @@ class QCMQuestion
 
         return $this;
     }
+    
 }

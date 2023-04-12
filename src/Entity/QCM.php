@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-#[ORM\Entity(repositoryClass: QCMRepository::class)]
+#[ORM\Entity(repositoryClass:"App\Repository\QCMRepository")]
 class QCM
 {
      #[ORM\Id]
@@ -36,9 +36,7 @@ class QCM
     
      #[ORM\OneToMany(targetEntity: QCMQuestion::class, mappedBy: "qcm", cascade: ["persist", "remove"])] 
     private Collection $qcmQuestions;
-
     
-
     
      #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: "qcms")] 
     private ?Module $module;

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-#[ORM\Entity(repositoryClass: PDFRepository::class)]
+#[ORM\Entity(repositoryClass:"App\Repository\PDFRepository")]
 class PDF
 {
      #[ORM\Id]
@@ -32,7 +32,7 @@ class PDF
 
      
     #[ORM\Column(length: 4, nullable: true)]
-    private ?sting $extension;
+    private ?string $extension;
  
      #[ORM\Column(nullable: true)]
      #[Assert\File(

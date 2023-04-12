@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\AbstractTypeExtension;
 
 
-#[ORM\Entity(repositoryClass: ModuleQuestionRepository::class)]
+#[ORM\Entity(repositoryClass:"App\Repository\ModuleQuestionRepository")]
 class ModuleQuestion
 {
 
